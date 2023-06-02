@@ -30,9 +30,7 @@
       "htmlacademy/react-typescript"
     ],
     "parserOptions": {
-      "project": [
-        "tsconfig.json"
-      ]
+      "project": true
     },
     "overrides": [
       {
