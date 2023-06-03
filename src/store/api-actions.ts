@@ -5,7 +5,7 @@ import {ApiRoute, BASE_URL} from '../const';
 import {ItemRdo} from '../types/item.rdo';
 import {CreateItemDto} from '../types/create-item.dto';
 
-export const fetchItemsAction = createAsyncThunk<ItemRdo[], CreateItemDto, {
+export const postItemAction = createAsyncThunk<ItemRdo[], CreateItemDto, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;

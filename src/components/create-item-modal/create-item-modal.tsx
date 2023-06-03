@@ -16,9 +16,11 @@ import {ChangeEvent, useEffect, useRef, useState} from 'react';
 import {ItemType, ItemTypeMap} from '../../types/item-type.enum';
 import {nanoid} from 'nanoid';
 import DeadlineDatePicker from '../date-picker/date-picker';
+import {useAppDispatch} from '../../hooks';
+import {postItemAction} from '../../store/api-actions';
 
 function CreateItemModal(): JSX.Element {
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const [isModalOpened, setIsModalOpened] = useState(false);
 
@@ -50,10 +52,12 @@ function CreateItemModal(): JSX.Element {
       setDescriptionValue('');
       setDeadline(undefined);
       setIsModalOpened(false);
-      console.log(titleValue);
-      console.log(descriptionValue);
-      console.log(itemType);
-      console.log(deadline);
+      dispatch(postItemAction({
+        title: titleValue,
+        description: descriptionValue,
+        deadline,
+        type: itemType
+      }));
     }
     if (!titleValue) {
       setTitleHelperText('Введите название');
