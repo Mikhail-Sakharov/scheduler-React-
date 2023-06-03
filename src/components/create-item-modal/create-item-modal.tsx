@@ -18,6 +18,8 @@ import {nanoid} from 'nanoid';
 import DeadlineDatePicker from '../date-picker/date-picker';
 
 function CreateItemModal(): JSX.Element {
+  // const dispatch = useAppDispatch();
+
   const [isModalOpened, setIsModalOpened] = useState(false);
 
   const createNewItemButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -95,6 +97,8 @@ function CreateItemModal(): JSX.Element {
   };
 
   const handleCloseModalButtonClick = () => {
+    setTitleHelperText('');
+    setDescriptionHelperText('');
     setIsModalOpened(false);
   };
 
