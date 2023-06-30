@@ -3,5 +3,5 @@ export class UpdateItemDto {
   public description?: string;
   // public listsIds?: string[];
   // public consistsOfItemsIds?: string[];
-  // public deadline?: string | null;
+  public deadline?: string | null;
 }

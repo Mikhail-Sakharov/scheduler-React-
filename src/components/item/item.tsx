@@ -3,7 +3,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {IconButton, Stack, TextField} from '@mui/material';
+import {Checkbox, FormControlLabel, IconButton, Stack, TextField} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
@@ -12,6 +12,7 @@ import {ItemRdo} from '../../types/item.rdo';
 import {ChangeEvent, useEffect, useState} from 'react';
 import {useAppDispatch} from '../../hooks';
 import {updateItemAction} from '../../store/api-actions';
+import DeadlineDatePicker from '../date-picker/date-picker';
 
 type ItemProps = {
   item: ItemRdo;
@@ -24,11 +25,15 @@ function Item({item}: ItemProps): JSX.Element {
 
   const [isContentEditable, setContentEditable] = useState(false);
 
+  const [isDeadlineInputDisabled, setIsDeadlineInputDisabled] = useState(false);
+
   const [titleValue, setTitleValue] = useState(item.title);
   const [titleHelperText, setTitleHelperText] = useState('');
 
   const [descriptionValue, setDescriptionValue] = useState(item.description);
   const [descriptionHelperText, setDescriptionHelperText] = useState('');
+
+  const [deadline, setDeadline] = useState<string | undefined>(undefined);
 
   const [isFormValid, setIsFormValid] = useState(false);
 
@@ -51,7 +56,8 @@ function Item({item}: ItemProps): JSX.Element {
         id: item.id,
         updateItemDto: {
           title: titleValue,
-          description: descriptionValue
+          description: descriptionValue,
+          deadline: deadline ?? null
         }
       }));
     }
@@ -88,6 +94,16 @@ function Item({item}: ItemProps): JSX.Element {
     }
   };
 
+  const handleUndedlinedInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    const checked = evt.currentTarget.checked;
+    if (checked) {
+      setDeadline(undefined);
+      setIsDeadlineInputDisabled(true);
+    } else {
+      setIsDeadlineInputDisabled(false);
+    }
+  };
+
   return (
     <Accordion>
       <AccordionSummary
@@ -110,23 +126,9 @@ function Item({item}: ItemProps): JSX.Element {
                 </Typography>
               )
           }
-          {
-            isContentEditable
-              ? (
-                <TextField
-                  defaultValue={item.title}
-                  onChange={handleTitleInputChange}
-                  error={titleHelperText !== ''}
-                  helperText={titleHelperText}
-                  size='small'
-                />
-              )
-              : (
-                <Typography>
-                  {item.title}
-                </Typography>
-              )
-          }
+          <Typography>
+            {item.title}
+          </Typography>
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
@@ -134,13 +136,35 @@ function Item({item}: ItemProps): JSX.Element {
           {
             isContentEditable
               ? (
-                <TextField
-                  defaultValue={item.description}
-                  onChange={handleDescriptionInputChange}
-                  error={descriptionHelperText !== ''}
-                  helperText={descriptionHelperText}
-                  size='small'
-                />
+                <>
+                  <TextField
+                    defaultValue={item.title}
+                    onChange={handleTitleInputChange}
+                    error={titleHelperText !== ''}
+                    helperText={titleHelperText}
+                    size='small'
+                  />
+                  <TextField
+                    defaultValue={item.description}
+                    onChange={handleDescriptionInputChange}
+                    error={descriptionHelperText !== ''}
+                    helperText={descriptionHelperText}
+                    size='small'
+                    multiline
+                    rows={4}
+                  />
+                  <Stack direction={'row'} spacing={2}>
+                    <DeadlineDatePicker
+                      setDeadline={setDeadline}
+                      value={item.deadline ?? undefined}
+                      disabled={isDeadlineInputDisabled}
+                    />
+                    <FormControlLabel
+                      control={<Checkbox onChange={handleUndedlinedInputChange}/>}
+                      label="Бессрочно"
+                    />
+                  </Stack>
+                </>
               )
               : (
                 <Typography
