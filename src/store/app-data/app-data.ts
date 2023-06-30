@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {ReducerNameSpace} from '../../const';
-import {postItemAction} from '../api-actions';
+import {fetchItemsAction, postItemAction} from '../api-actions';
 import {ItemRdo} from '../../types/item.rdo';
 
 type AppData = {
@@ -18,6 +18,9 @@ export const appData = createSlice({
   extraReducers(builder) {
     builder
       .addCase(postItemAction.fulfilled, (state, action) => {
+        state.items = action.payload;
+      })
+      .addCase(fetchItemsAction.fulfilled, (state, action) => {
         state.items = action.payload;
       });
   },

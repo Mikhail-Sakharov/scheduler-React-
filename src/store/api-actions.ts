@@ -10,9 +10,21 @@ export const postItemAction = createAsyncThunk<ItemRdo[], CreateItemDto, {
   state: State;
   extra: AxiosInstance;
 }>(
-  'items/get',
+  'items/post',
   async (createItemDto, {dispatch, extra: api}) => {
     const {data} = await api.post<ItemRdo[]>(`${BASE_URL}${ApiRoute.Items}`, createItemDto);
+    return data;
+  },
+);
+
+export const fetchItemsAction = createAsyncThunk<ItemRdo[], undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'items/get',
+  async (_arg, {dispatch, extra: api}) => {
+    const {data} = await api.get<ItemRdo[]>(`${BASE_URL}${ApiRoute.Items}`);
     return data;
   },
 );
