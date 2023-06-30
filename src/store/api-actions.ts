@@ -4,6 +4,12 @@ import {AxiosInstance} from 'axios';
 import {ApiRoute, BASE_URL} from '../const';
 import {ItemRdo} from '../types/item.rdo';
 import {CreateItemDto} from '../types/create-item.dto';
+import {UpdateItemDto} from '../types/update-item.dto';
+
+export type UpdateItemArgs = {
+  id: string;
+  updateItemDto: UpdateItemDto;
+};
 
 export const postItemAction = createAsyncThunk<ItemRdo[], CreateItemDto, {
   dispatch: AppDispatch;
@@ -25,6 +31,20 @@ export const fetchItemsAction = createAsyncThunk<ItemRdo[], undefined, {
   'items/get',
   async (_arg, {dispatch, extra: api}) => {
     const {data} = await api.get<ItemRdo[]>(`${BASE_URL}${ApiRoute.Items}`);
+    return data;
+  },
+);
+
+export const updateItemAction = createAsyncThunk<ItemRdo[], UpdateItemArgs, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'items/update',
+  async (updateItemArgs, {dispatch, extra: api}) => {
+    const id = updateItemArgs.id;
+    const updateItemDto = updateItemArgs.updateItemDto;
+    const {data} = await api.patch<ItemRdo[]>(`${BASE_URL}${ApiRoute.Items}/${id}`, updateItemDto);
     return data;
   },
 );

@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {ReducerNameSpace} from '../../const';
-import {fetchItemsAction, postItemAction} from '../api-actions';
+import {fetchItemsAction, postItemAction, updateItemAction} from '../api-actions';
 import {ItemRdo} from '../../types/item.rdo';
 
 type AppData = {
@@ -21,6 +21,9 @@ export const appData = createSlice({
         state.items = action.payload;
       })
       .addCase(fetchItemsAction.fulfilled, (state, action) => {
+        state.items = action.payload;
+      })
+      .addCase(updateItemAction.fulfilled, (state, action) => {
         state.items = action.payload;
       });
   },
