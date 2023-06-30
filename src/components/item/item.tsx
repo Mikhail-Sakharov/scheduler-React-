@@ -11,7 +11,7 @@ import {getDeadlineDate} from '../../helpers';
 import {ItemRdo} from '../../types/item.rdo';
 import {ChangeEvent, useEffect, useState} from 'react';
 import {useAppDispatch} from '../../hooks';
-import {updateItemAction} from '../../store/api-actions';
+import {deleteItemAction, fetchItemsAction, updateItemAction} from '../../store/api-actions';
 import DeadlineDatePicker from '../date-picker/date-picker';
 
 type ItemProps = {
@@ -46,7 +46,8 @@ function Item({item}: ItemProps): JSX.Element {
   }, [descriptionValue.length, titleValue.length]);
 
   const handleDeleteButtonClick = () => {
-    setContentEditable(false); // tmp
+    dispatch(deleteItemAction(item.id));
+    dispatch(fetchItemsAction());
   };
 
   const handleSaveButtonClick = () => {

@@ -48,3 +48,14 @@ export const updateItemAction = createAsyncThunk<ItemRdo[], UpdateItemArgs, {
     return data;
   },
 );
+
+export const deleteItemAction = createAsyncThunk<void, string, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'items/delete',
+  async (id, {dispatch, extra: api}) => {
+    await api.delete<void>(`${BASE_URL}${ApiRoute.Items}/${id}`);
+  },
+);
