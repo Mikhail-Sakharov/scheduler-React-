@@ -25,15 +25,18 @@ function Item({item}: ItemProps): JSX.Element {
   const [titleValue, setTitleValue] = useState(item.title);
   const [titleHelperText, setTitleHelperText] = useState('');
 
+  const [descriptionValue, setDescriptionValue] = useState(item.description);
+  const [descriptionHelperText, setDescriptionHelperText] = useState('');
+
   const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
-    if (titleValue.length >= 5 && titleValue.length <= 30) {
+    if (titleValue.length >= 5 && titleValue.length <= 30 && descriptionValue.length <= 230) {
       setIsFormValid(true);
     } else {
       setIsFormValid(false);
     }
-  }, [titleValue.length]);
+  }, [descriptionValue.length, titleValue.length]);
 
   const handleDeleteButtonClick = () => {
     setContentEditable(false); // tmp
@@ -45,7 +48,8 @@ function Item({item}: ItemProps): JSX.Element {
       dispatch(updateItemAction({
         id: item.id,
         updateItemDto: {
-          title: titleValue
+          title: titleValue,
+          description: descriptionValue
         }
       }));
     }
@@ -69,6 +73,16 @@ function Item({item}: ItemProps): JSX.Element {
     }
     if (value.length >= 5 && value.length <= 30) {
       setTitleHelperText('');
+    }
+  };
+
+  const handleDescriptionInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    const value = evt.currentTarget.value;
+    setDescriptionValue(value);
+    if (value.length > 230) {
+      setDescriptionHelperText('Максимальная длина 230 символов');
+    } else {
+      setDescriptionHelperText('');
     }
   };
 
@@ -115,13 +129,27 @@ function Item({item}: ItemProps): JSX.Element {
                 </Typography>
               )
           }
-          <Typography
-            sx={{
-              fontSize: '14px'
-            }}
-          >
-            {item.description}
-          </Typography>
+          {
+            isContentEditable
+              ? (
+                <TextField
+                  defaultValue={item.description}
+                  onChange={handleDescriptionInputChange}
+                  error={descriptionHelperText !== ''}
+                  helperText={descriptionHelperText}
+                  size='small'
+                />
+              )
+              : (
+                <Typography
+                  sx={{
+                    fontSize: '14px'
+                  }}
+                >
+                  {item.description}
+                </Typography>
+              )
+          }
           <Stack direction={'row'}>
             {
               isContentEditable
