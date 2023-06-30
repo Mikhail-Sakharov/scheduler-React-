@@ -20,6 +20,8 @@ type ItemProps = {
 function Item({item}: ItemProps): JSX.Element {
   const dispatch = useAppDispatch();
 
+  const itemDeadlineColor = item.deadline && new Date(item.deadline) < new Date() ? 'red' : 'green';
+
   const [isContentEditable, setContentEditable] = useState(false);
 
   const [titleValue, setTitleValue] = useState(item.title);
@@ -94,7 +96,20 @@ function Item({item}: ItemProps): JSX.Element {
         }}
         expandIcon={<ExpandMoreIcon />}
       >
-        <Stack direction={'row'}>
+        <Stack direction={'column'}>
+          {
+            item.deadline
+              && (
+                <Typography
+                  sx={{
+                    color: itemDeadlineColor,
+                    fontSize: '10px'
+                  }}
+                >
+                  {getDeadlineDate(item.deadline)}
+                </Typography>
+              )
+          }
           {
             isContentEditable
               ? (
@@ -116,19 +131,6 @@ function Item({item}: ItemProps): JSX.Element {
       </AccordionSummary>
       <AccordionDetails>
         <Stack direction={'column'} spacing={1}>
-          {
-            item.deadline
-              && (
-                <Typography
-                  sx={{
-                    color: 'green',
-                    fontSize: '10px'
-                  }}
-                >
-                  {getDeadlineDate(item.deadline)}
-                </Typography>
-              )
-          }
           {
             isContentEditable
               ? (
