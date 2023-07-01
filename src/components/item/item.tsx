@@ -33,7 +33,7 @@ function Item({item}: ItemProps): JSX.Element {
   const [descriptionValue, setDescriptionValue] = useState(item.description);
   const [descriptionHelperText, setDescriptionHelperText] = useState('');
 
-  const [deadline, setDeadline] = useState<string | undefined>(undefined);
+  const [deadline, setDeadline] = useState<string | undefined>(item.deadline ?? undefined);
 
   const [isFormValid, setIsFormValid] = useState(false);
 
