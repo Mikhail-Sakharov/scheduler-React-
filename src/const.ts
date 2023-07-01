@@ -6,6 +6,10 @@ export enum ApiRoute {
 
 export const REQUEST_TIMEOUT = 5000;
 
+export enum AppRoute {
+  Inbox = '/'
+}
+
 export enum ReducerNameSpace {
   AppData = 'APP_DATA'
 }
