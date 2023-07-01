@@ -18,6 +18,11 @@ import {nanoid} from 'nanoid';
 import DeadlineDatePicker from '../date-picker/date-picker';
 import {useAppDispatch} from '../../hooks';
 import {postItemAction} from '../../store/api-actions';
+import {
+  CREATE_BUTTON_TITLE,
+  CREATE_NEW_LIST_ITEM_BUTTON_TITLE,
+  CREATE_NEW_LIST_ITEM_MODAL_TITLE
+} from '../../ui-const';
 
 function CreateItemModal(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -114,7 +119,7 @@ function CreateItemModal(): JSX.Element {
         variant="contained"
         endIcon={<AddTask />}
       >
-        Добавить новый элемент
+        {CREATE_NEW_LIST_ITEM_BUTTON_TITLE}
       </Button>
       <Popover
         open={isModalOpened}
@@ -137,7 +142,7 @@ function CreateItemModal(): JSX.Element {
           direction="column"
         >
           <Typography sx={{ p: 2 }}>
-            Создайте новый список или элемент для существующего
+            {CREATE_NEW_LIST_ITEM_MODAL_TITLE}
           </Typography>
           <TextField
             error={titleHelperText !== ''}
@@ -184,7 +189,7 @@ function CreateItemModal(): JSX.Element {
               variant="contained"
               endIcon={<Add />}
             >
-              Создать
+              {CREATE_BUTTON_TITLE}
             </Button>
           </Stack>
         </Stack>

@@ -13,6 +13,8 @@ import {ChangeEvent, useEffect, useState} from 'react';
 import {useAppDispatch} from '../../hooks';
 import {deleteItemAction, fetchItemsAction, updateItemAction} from '../../store/api-actions';
 import DeadlineDatePicker from '../date-picker/date-picker';
+import {Cancel} from '@mui/icons-material';
+import {EXPIRED_ITEM_DEADLINE_COLOR, UNEXPIRED_ITEM_DEADLINE_COLOR} from '../../ui-const';
 
 type ItemProps = {
   item: ItemRdo;
@@ -21,7 +23,7 @@ type ItemProps = {
 function Item({item}: ItemProps): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const itemDeadlineColor = item.deadline && new Date(item.deadline) < new Date() ? 'red' : 'green';
+  const itemDeadlineColor = item.deadline && new Date(item.deadline) < new Date() ? EXPIRED_ITEM_DEADLINE_COLOR : UNEXPIRED_ITEM_DEADLINE_COLOR;
 
   const [isContentEditable, setContentEditable] = useState(false);
 
@@ -62,6 +64,10 @@ function Item({item}: ItemProps): JSX.Element {
         }
       }));
     }
+  };
+
+  const handleCloseButtonClick = () => {
+    setContentEditable(false);
   };
 
   const handleEditButtonClick = () => {
@@ -183,10 +189,13 @@ function Item({item}: ItemProps): JSX.Element {
                 ? (
                   <>
                     <IconButton onClick={handleDeleteButtonClick}>
-                      <DeleteIcon />
+                      <DeleteIcon color='error'/>
                     </IconButton>
                     <IconButton onClick={handleSaveButtonClick}>
-                      <SaveIcon />
+                      <SaveIcon color='primary'/>
+                    </IconButton>
+                    <IconButton onClick={handleCloseButtonClick}>
+                      <Cancel />
                     </IconButton>
                   </>
                 )
