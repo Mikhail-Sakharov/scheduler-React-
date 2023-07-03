@@ -5,6 +5,8 @@ import {ApiRoute, BASE_URL} from '../const';
 import {ItemRdo} from '../types/item.rdo';
 import {CreateItemDto} from '../types/create-item.dto';
 import {UpdateItemDto} from '../types/update-item.dto';
+import {ListRdo} from '../types/list.rdo';
+import {CreateListDto} from '../types/create-list.dto';
 
 export type UpdateItemArgs = {
   id: string;
@@ -57,5 +59,29 @@ export const deleteItemAction = createAsyncThunk<void, string, {
   'items/delete',
   async (id, {dispatch, extra: api}) => {
     await api.delete<void>(`${BASE_URL}${ApiRoute.Items}/${id}`);
+  },
+);
+
+export const postListAction = createAsyncThunk<ListRdo[], CreateListDto, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'lists/post',
+  async (createListDto, {dispatch, extra: api}) => {
+    const {data} = await api.post<ListRdo[]>(`${BASE_URL}${ApiRoute.Lists}`, createListDto);
+    return data;
+  },
+);
+
+export const fetchListsAction = createAsyncThunk<ListRdo[], undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'lists/get',
+  async (_arg, {dispatch, extra: api}) => {
+    const {data} = await api.get<ListRdo[]>(`${BASE_URL}${ApiRoute.Lists}`);
+    return data;
   },
 );
