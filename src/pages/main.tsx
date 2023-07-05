@@ -10,7 +10,7 @@ import {AddTask} from '@mui/icons-material';
 import {CREATE_NEW_LIST_ITEM_BUTTON_TITLE} from '../ui-const';
 import {useState} from 'react';
 
-function InboxPage(): JSX.Element {
+function Main(): JSX.Element {
 
   const [isModalOpened, setIsModalOpened] = useState(false);
 
@@ -21,24 +21,26 @@ function InboxPage(): JSX.Element {
   return (
     <Stack direction={'column'} spacing={1}>
       <Header />
-      <Stack direction={'row'} spacing={1}>
-        <Stack direction={'column'} width={400} spacing={1}>
-          <CreateListModal/>
-          <ListsStack />
-        </Stack>
-        <Stack direction={'column'} spacing={1}>
-          <Button
-            onClick={handleCreateNewItemButtonClick}
-            variant="contained"
-            endIcon={<AddTask />}
-          >
-            {CREATE_NEW_LIST_ITEM_BUTTON_TITLE}
-          </Button>
-          <CreateItemModalUpdated
-            isModalOpened={isModalOpened}
-            setIsModalOpened={setIsModalOpened}
-          />
-          <InboxList />
+      <Stack direction={'row'} spacing={1} justifyContent={'space-between'}>
+        <Stack direction={'row'} spacing={1} justifyContent={'flex-start'}>
+          <Stack direction={'column'} width={400} spacing={1}>
+            <CreateListModal/>
+            <ListsStack />
+          </Stack>
+          <Stack direction={'column'} width={800} spacing={1}>
+            <Button
+              onClick={handleCreateNewItemButtonClick}
+              variant="contained"
+              endIcon={<AddTask />}
+            >
+              {CREATE_NEW_LIST_ITEM_BUTTON_TITLE}
+            </Button>
+            <CreateItemModalUpdated
+              isModalOpened={isModalOpened}
+              setIsModalOpened={setIsModalOpened}
+            />
+            <InboxList />
+          </Stack>
         </Stack>
         <Stack direction={'column'} spacing={1}>
           <Calendar />
@@ -48,4 +50,4 @@ function InboxPage(): JSX.Element {
   );
 }
 
-export default InboxPage;
+export default Main;

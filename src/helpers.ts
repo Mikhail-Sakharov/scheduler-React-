@@ -1,3 +1,5 @@
+import {GetItemsQuery} from './types/get-items.query';
+
 const MonthNamesMap = {
   '01': 'января',
   '02': 'февраля',
@@ -21,4 +23,18 @@ export const getDeadlineDate = (date: string) => {
   const deadlineDate = `${day} ${month}, ${time ? time[0] : ''}`;
 
   return deadlineDate;
+};
+
+export const getQueryString = (queryArgs?: GetItemsQuery) => {
+  if (!queryArgs) {return '';}
+
+  const queryParams = [
+    `${queryArgs.listsIds !== undefined ? `listsIds=${queryArgs.listsIds.join(',')}` : ''}`
+  ];
+
+  const isNotEmptyString = queryParams.filter((param) => param !== '').join('') !== '';
+
+  const queryString = isNotEmptyString ? `?${queryParams.filter((param) => param !== '').join('&')}` : '';
+
+  return queryString;
 };

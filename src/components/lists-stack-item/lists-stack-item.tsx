@@ -6,7 +6,7 @@ import {Cancel} from '@mui/icons-material';
 import {ChangeEvent, useEffect, useState} from 'react';
 import {ListRdo} from '../../types/list.rdo';
 import {useAppDispatch} from '../../hooks';
-import {deleteListAction, updateListAction} from '../../store/api-actions';
+import {deleteListAction, fetchItemsAction, updateListAction} from '../../store/api-actions';
 
 export interface ListsStackItemProps {
   list: ListRdo;
@@ -36,6 +36,9 @@ function ListsStackItem(
 
   const handleListItemButtonClick = (id: string) => {
     setCurrentlySelectedListItem(id);
+    dispatch(fetchItemsAction({
+      listsIds: [id]
+    }));
   };
 
   const handleDeleteButtonClick = () => {
@@ -82,11 +85,15 @@ function ListsStackItem(
   return (
     <Stack>
       <Divider />
-      <Stack direction={'row'}>
+      <Stack direction={'row'} justifyContent={'space-between'}>
         {
           isContentEditable
             ? (
               <TextField
+                sx={{
+                  border: '4.5px solid orange',
+                  borderRadius: '7px'
+                }}
                 defaultValue={list.title}
                 onChange={handleTitleInputChange}
                 error={titleHelperText !== ''}

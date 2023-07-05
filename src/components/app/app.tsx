@@ -1,5 +1,5 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import InboxPage from '../../pages/inbox';
+import Main from '../../pages/main';
 import {AppRoute} from '../../const';
 
 function App(): JSX.Element {
@@ -7,7 +7,7 @@ function App(): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={AppRoute.Inbox} element={<InboxPage />}/>
+        <Route path={AppRoute.Main} element={<Main />}/>
       </Routes>
     </BrowserRouter>
   );
