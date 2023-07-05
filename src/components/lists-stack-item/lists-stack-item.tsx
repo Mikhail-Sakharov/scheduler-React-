@@ -10,14 +10,16 @@ import {deleteListAction, updateListAction} from '../../store/api-actions';
 
 export interface ListsStackItemProps {
   list: ListRdo;
+  currentlySelectedListItem: string;
+  setCurrentlySelectedListItem: (state: string) => void;
 }
 
-function ListsStackItem({list}: ListsStackItemProps): JSX.Element {
+function ListsStackItem(
+  {list, currentlySelectedListItem, setCurrentlySelectedListItem}: ListsStackItemProps
+): JSX.Element {
   const dispatch = useAppDispatch();
 
   const [isContentEditable, setContentEditable] = useState(false);
-
-  const [currentlySelectedListItem, setCurrentlySelectedListItem] = useState('');
 
   const [titleValue, setTitleValue] = useState(list.title);
   const [titleHelperText, setTitleHelperText] = useState('');
