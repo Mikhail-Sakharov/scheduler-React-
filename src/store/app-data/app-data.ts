@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {ReducerNameSpace} from '../../const';
-import {fetchItemsAction, fetchListsAction, postItemAction, postListAction, updateItemAction} from '../api-actions';
+import {deleteListAction, fetchItemsAction, fetchListsAction, postItemAction, postListAction, updateItemAction, updateListAction} from '../api-actions';
 import {ItemRdo} from '../../types/item.rdo';
 import {ListRdo} from '../../types/list.rdo';
 
@@ -33,6 +33,12 @@ export const appData = createSlice({
         state.lists = action.payload;
       })
       .addCase(fetchListsAction.fulfilled, (state, action) => {
+        state.lists = action.payload;
+      })
+      .addCase(updateListAction.fulfilled, (state, action) => {
+        state.lists = action.payload;
+      })
+      .addCase(deleteListAction.fulfilled, (state, action) => {
         state.lists = action.payload;
       });
   },
