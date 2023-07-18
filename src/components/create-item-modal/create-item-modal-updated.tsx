@@ -19,6 +19,7 @@ import {postItemAction} from '../../store/api-actions';
 import {ItemType, ItemTypeMap} from '../../types/item-type.enum';
 import DeadlineDatePicker from '../date-picker/date-picker';
 import {useAppDispatch} from '../../hooks';
+import AddToListsModal from '../add-to-lists-modal/add-to-lists-modal';
 
 export interface CreateItemModalUpdatedProps {
   isModalOpened: boolean;
@@ -30,6 +31,8 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
 
   const [titleValue, setTitleValue] = useState('');
   const [titleHelperText, setTitleHelperText] = useState('');
+
+  const [selectedLists, setSelectedLists] = useState<string[]>([]);
 
   const [descriptionValue, setDescriptionValue] = useState('');
   const [descriptionHelperText, setDescriptionHelperText] = useState('');
@@ -56,6 +59,7 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
       setIsModalOpened(false);
       dispatch(postItemAction({
         title: titleValue,
+        listsIds: selectedLists,
         description: descriptionValue,
         deadline,
         type: itemType
@@ -130,6 +134,7 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
           label="Название"
           variant="outlined"
         />
+        <AddToListsModal setExtSelectedLists={setSelectedLists}/>
         <TextField
           error={descriptionHelperText !== ''}
           helperText={descriptionHelperText}
@@ -165,7 +170,7 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
         <Stack direction="row" spacing={2} justifyContent={'center'}>
           <Button
             onClick={handleCreateButtonClick}
-            variant="contained"
+            variant="outlined"
             endIcon={<Add />}
           >
             {CREATE_BUTTON_TITLE}

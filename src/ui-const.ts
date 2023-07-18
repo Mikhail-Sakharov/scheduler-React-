@@ -7,3 +7,5 @@ export const CREATE_BUTTON_TITLE = 'Создать';
 export const EXPIRED_ITEM_DEADLINE_COLOR = 'red';
 
 export const UNEXPIRED_ITEM_DEADLINE_COLOR = 'green';
+
+export const ADD_TO_LISTS_BUTTON_TITLE = 'Добавить в списки';

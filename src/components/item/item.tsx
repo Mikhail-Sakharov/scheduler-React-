@@ -15,6 +15,7 @@ import {deleteItemAction, fetchItemsAction, updateItemAction} from '../../store/
 import DeadlineDatePicker from '../date-picker/date-picker';
 import {Cancel} from '@mui/icons-material';
 import {EXPIRED_ITEM_DEADLINE_COLOR, UNEXPIRED_ITEM_DEADLINE_COLOR} from '../../ui-const';
+import AddToListsModal from '../add-to-lists-modal/add-to-lists-modal';
 
 type ItemProps = {
   item: ItemRdo;
@@ -23,7 +24,9 @@ type ItemProps = {
 function Item({item}: ItemProps): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const itemDeadlineColor = item.deadline && new Date(item.deadline) < new Date() ? EXPIRED_ITEM_DEADLINE_COLOR : UNEXPIRED_ITEM_DEADLINE_COLOR;
+  const itemDeadlineColor = item.deadline && new Date(item.deadline) < new Date()
+    ? EXPIRED_ITEM_DEADLINE_COLOR
+    : UNEXPIRED_ITEM_DEADLINE_COLOR;
 
   const [isContentEditable, setContentEditable] = useState(false);
 
@@ -31,6 +34,8 @@ function Item({item}: ItemProps): JSX.Element {
 
   const [titleValue, setTitleValue] = useState(item.title);
   const [titleHelperText, setTitleHelperText] = useState('');
+
+  const [selectedLists, setSelectedLists] = useState<string[]>(item.listsIds);
 
   const [descriptionValue, setDescriptionValue] = useState(item.description);
   const [descriptionHelperText, setDescriptionHelperText] = useState('');
@@ -59,6 +64,7 @@ function Item({item}: ItemProps): JSX.Element {
         id: item.id,
         updateItemDto: {
           title: titleValue,
+          listsIds: selectedLists,
           description: descriptionValue,
           deadline: deadline ?? null
         }
@@ -67,6 +73,9 @@ function Item({item}: ItemProps): JSX.Element {
   };
 
   const handleCloseButtonClick = () => {
+    setSelectedLists(item.listsIds);
+    setTitleHelperText('');
+    setIsDeadlineInputDisabled(false);
     setContentEditable(false);
   };
 
@@ -160,6 +169,7 @@ function Item({item}: ItemProps): JSX.Element {
                     multiline
                     rows={4}
                   />
+                  <AddToListsModal setExtSelectedLists={setSelectedLists} listsIds={selectedLists}/>
                   <Stack direction={'row'} spacing={2}>
                     <DeadlineDatePicker
                       setDeadline={setDeadline}
