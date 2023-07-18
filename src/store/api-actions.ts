@@ -46,7 +46,7 @@ export const fetchItemsAction = createAsyncThunk<ItemRdo[], GetItemsQuery | unde
   },
 );
 
-export const updateItemAction = createAsyncThunk<ItemRdo[], UpdateItemArgs, {
+export const updateItemAction = createAsyncThunk<void, UpdateItemArgs, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
@@ -55,7 +55,7 @@ export const updateItemAction = createAsyncThunk<ItemRdo[], UpdateItemArgs, {
   async (updateItemArgs, {dispatch, extra: api}) => {
     const id = updateItemArgs.id;
     const updateItemDto = updateItemArgs.updateItemDto;
-    const {data} = await api.patch<ItemRdo[]>(`${BASE_URL}${ApiRoute.Items}/${id}`, updateItemDto);
+    const {data} = await api.patch<void>(`${BASE_URL}${ApiRoute.Items}/${id}`, updateItemDto);
     return data;
   },
 );
