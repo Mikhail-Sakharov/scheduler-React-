@@ -21,14 +21,14 @@ export interface UpdateListArgs {
   updateListDto: UpdateListDto;
 }
 
-export const postItemAction = createAsyncThunk<ItemRdo[], CreateItemDto, {
+export const postItemAction = createAsyncThunk<ItemRdo, CreateItemDto, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'items/post',
   async (createItemDto, {dispatch, extra: api}) => {
-    const {data} = await api.post<ItemRdo[]>(`${BASE_URL}${ApiRoute.Items}`, createItemDto);
+    const {data} = await api.post<ItemRdo>(`${BASE_URL}${ApiRoute.Items}`, createItemDto);
     return data;
   },
 );

@@ -4,7 +4,6 @@ import {
   deleteListAction,
   fetchItemsAction,
   fetchListsAction,
-  postItemAction,
   postListAction,
   updateListAction
 } from '../api-actions';
@@ -33,9 +32,6 @@ export const appData = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(postItemAction.fulfilled, (state, action) => {
-        state.items = action.payload;
-      })
       .addCase(fetchItemsAction.fulfilled, (state, action) => {
         state.items = action.payload;
       })

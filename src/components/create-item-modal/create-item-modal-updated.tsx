@@ -15,11 +15,13 @@ import {
 import {ChangeEvent, useEffect, useState} from 'react';
 import {CREATE_BUTTON_TITLE, CREATE_NEW_LIST_ITEM_MODAL_TITLE} from '../../ui-const';
 import {nanoid} from 'nanoid';
-import {postItemAction} from '../../store/api-actions';
+import {fetchItemsAction, postItemAction} from '../../store/api-actions';
 import {ItemType, ItemTypeMap} from '../../types/item-type.enum';
 import DeadlineDatePicker from '../date-picker/date-picker';
-import {useAppDispatch} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import AddToListsModal from '../add-to-lists-modal/add-to-lists-modal';
+import {getCurrentlySelectedListId} from '../../store/app-data/selectors';
+import {INBOX_LIST_ID} from '../../const';
 
 export interface CreateItemModalUpdatedProps {
   isModalOpened: boolean;
@@ -28,6 +30,8 @@ export interface CreateItemModalUpdatedProps {
 
 function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemModalUpdatedProps): JSX.Element {
   const dispatch = useAppDispatch();
+
+  const currentlySelectedListId = useAppSelector(getCurrentlySelectedListId);
 
   const [titleValue, setTitleValue] = useState('');
   const [titleHelperText, setTitleHelperText] = useState('');
@@ -51,19 +55,34 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
     }
   }, [descriptionValue.length, titleValue.length]);
 
+  const refreshSelectedList = () => {
+    if (currentlySelectedListId === INBOX_LIST_ID) {
+      dispatch(fetchItemsAction());
+    } else {
+      dispatch(fetchItemsAction({
+        listsIds: [currentlySelectedListId]
+      }));
+    }
+  };
+
+  const onCreateButtonClickDispatchData = async () => {
+    await dispatch(postItemAction({
+      title: titleValue,
+      listsIds: selectedLists,
+      description: descriptionValue,
+      deadline,
+      type: itemType
+    }));
+    refreshSelectedList();
+  };
+
   const handleCreateButtonClick = () => {
     if (isFormValid) {
       setTitleValue('');
       setDescriptionValue('');
       setDeadline(undefined);
       setIsModalOpened(false);
-      dispatch(postItemAction({
-        title: titleValue,
-        listsIds: selectedLists,
-        description: descriptionValue,
-        deadline,
-        type: itemType
-      }));
+      onCreateButtonClickDispatchData();
     }
     if (!titleValue) {
       setTitleHelperText('Введите название');
