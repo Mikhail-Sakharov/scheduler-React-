@@ -3,8 +3,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {setCurrentlySelectedListId} from '../../store/app-data/app-data';
 import {fetchItemsAction} from '../../store/api-actions';
 import {getCurrentlySelectedListId} from '../../store/app-data/selectors';
-
-export const INBOX_LIST_ID = 'INBOX_LIST_ID';
+import {INBOX_LIST_ID} from '../../const';
 
 function AllItemsButton(): JSX.Element {
   const dispatch = useAppDispatch();

@@ -17,6 +17,7 @@ import {Cancel} from '@mui/icons-material';
 import {EXPIRED_ITEM_DEADLINE_COLOR, UNEXPIRED_ITEM_DEADLINE_COLOR} from '../../ui-const';
 import AddToListsModal from '../add-to-lists-modal/add-to-lists-modal';
 import {getCurrentlySelectedListId} from '../../store/app-data/selectors';
+import {INBOX_LIST_ID} from '../../const';
 
 type ItemProps = {
   item: ItemRdo;
@@ -55,9 +56,23 @@ function Item({item}: ItemProps): JSX.Element {
     }
   }, [descriptionValue.length, titleValue.length]);
 
+  const refreshSelectedList = () => {
+    if (currentlySelectedListId === INBOX_LIST_ID) {
+      dispatch(fetchItemsAction());
+    } else {
+      dispatch(fetchItemsAction({
+        listsIds: [currentlySelectedListId]
+      }));
+    }
+  };
+
+  const onDeleteButtonClickDispatchData = async () => {
+    await dispatch(deleteItemAction(item.id));
+    refreshSelectedList();
+  };
+
   const handleDeleteButtonClick = () => {
-    dispatch(deleteItemAction(item.id));
-    dispatch(fetchItemsAction());
+    onDeleteButtonClickDispatchData();
   };
 
   const onSaveButtonClickDispatchData = async () => {
@@ -70,9 +85,7 @@ function Item({item}: ItemProps): JSX.Element {
         deadline: deadline ?? null
       }
     }));
-    dispatch(fetchItemsAction({
-      listsIds: [currentlySelectedListId]
-    }));
+    refreshSelectedList();
   };
 
   const handleSaveButtonClick = () => {
