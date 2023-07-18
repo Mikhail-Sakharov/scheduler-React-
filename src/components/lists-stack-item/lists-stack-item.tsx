@@ -7,6 +7,7 @@ import {ChangeEvent, useEffect, useState} from 'react';
 import {ListRdo} from '../../types/list.rdo';
 import {useAppDispatch} from '../../hooks';
 import {deleteListAction, fetchItemsAction, updateListAction} from '../../store/api-actions';
+import {setCurrentlySelectedListId} from '../../store/app-data/app-data';
 
 export interface ListsStackItemProps {
   list: ListRdo;
@@ -36,6 +37,7 @@ function ListsStackItem(
 
   const handleListItemButtonClick = (id: string) => {
     setCurrentlySelectedListItem(id);
+    dispatch(setCurrentlySelectedListId(id));
     dispatch(fetchItemsAction({
       listsIds: [id]
     }));

@@ -7,17 +7,23 @@ import {ListRdo} from '../../types/list.rdo';
 type AppData = {
   items: ItemRdo[];
   lists: ListRdo[];
+  currentlySelectedListId: string;
 };
 
 const initialState: AppData = {
   items: [],
-  lists: []
+  lists: [],
+  currentlySelectedListId: ''
 };
 
 export const appData = createSlice({
   name: ReducerNameSpace.AppData,
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentlySelectedListId: (state, action) => {
+      state.currentlySelectedListId = action.payload as string;
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(postItemAction.fulfilled, (state, action) => {
@@ -43,3 +49,7 @@ export const appData = createSlice({
       });
   },
 });
+
+export const {
+  setCurrentlySelectedListId
+} = appData.actions;

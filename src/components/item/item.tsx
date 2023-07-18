@@ -10,12 +10,13 @@ import SaveIcon from '@mui/icons-material/Save';
 import {getDeadlineDate} from '../../helpers';
 import {ItemRdo} from '../../types/item.rdo';
 import {ChangeEvent, useEffect, useState} from 'react';
-import {useAppDispatch} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {deleteItemAction, fetchItemsAction, updateItemAction} from '../../store/api-actions';
 import DeadlineDatePicker from '../date-picker/date-picker';
 import {Cancel} from '@mui/icons-material';
 import {EXPIRED_ITEM_DEADLINE_COLOR, UNEXPIRED_ITEM_DEADLINE_COLOR} from '../../ui-const';
 import AddToListsModal from '../add-to-lists-modal/add-to-lists-modal';
+import {getCurrentlySelectedListId} from '../../store/app-data/selectors';
 
 type ItemProps = {
   item: ItemRdo;
@@ -23,6 +24,8 @@ type ItemProps = {
 
 function Item({item}: ItemProps): JSX.Element {
   const dispatch = useAppDispatch();
+
+  const currentlySelectedListId = useAppSelector(getCurrentlySelectedListId);
 
   const itemDeadlineColor = item.deadline && new Date(item.deadline) < new Date()
     ? EXPIRED_ITEM_DEADLINE_COLOR
@@ -57,18 +60,25 @@ function Item({item}: ItemProps): JSX.Element {
     dispatch(fetchItemsAction());
   };
 
+  const onSaveButtonClickDispatchData = async () => {
+    await dispatch(updateItemAction({
+      id: item.id,
+      updateItemDto: {
+        title: titleValue,
+        listsIds: selectedLists,
+        description: descriptionValue,
+        deadline: deadline ?? null
+      }
+    }));
+    dispatch(fetchItemsAction({
+      listsIds: [currentlySelectedListId]
+    }));
+  };
+
   const handleSaveButtonClick = () => {
     if (isFormValid) {
       setContentEditable(false);
-      dispatch(updateItemAction({
-        id: item.id,
-        updateItemDto: {
-          title: titleValue,
-          listsIds: selectedLists,
-          description: descriptionValue,
-          deadline: deadline ?? null
-        }
-      }));
+      onSaveButtonClickDispatchData();
     }
   };
 
