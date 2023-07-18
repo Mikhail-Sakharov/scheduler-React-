@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {ReducerNameSpace} from '../../const';
+import {INBOX_LIST_ID, ReducerNameSpace} from '../../const';
 import {
   deleteListAction,
   fetchItemsAction,
@@ -19,7 +19,7 @@ type AppData = {
 const initialState: AppData = {
   items: [],
   lists: [],
-  currentlySelectedListId: ''
+  currentlySelectedListId: INBOX_LIST_ID
 };
 
 export const appData = createSlice({

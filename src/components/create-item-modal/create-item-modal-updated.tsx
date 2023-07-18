@@ -153,7 +153,7 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
           label="Название"
           variant="outlined"
         />
-        <AddToListsModal setExtSelectedLists={setSelectedLists}/>
+        <AddToListsModal setExtSelectedLists={setSelectedLists} listsIds={[currentlySelectedListId]}/>
         <TextField
           error={descriptionHelperText !== ''}
           helperText={descriptionHelperText}
