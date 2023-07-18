@@ -5,20 +5,21 @@ import SaveIcon from '@mui/icons-material/Save';
 import {Cancel} from '@mui/icons-material';
 import {ChangeEvent, useEffect, useState} from 'react';
 import {ListRdo} from '../../types/list.rdo';
-import {useAppDispatch} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {deleteListAction, fetchItemsAction, updateListAction} from '../../store/api-actions';
 import {setCurrentlySelectedListId} from '../../store/app-data/app-data';
+import {getCurrentlySelectedListId} from '../../store/app-data/selectors';
 
 export interface ListsStackItemProps {
   list: ListRdo;
-  currentlySelectedListItem: string;
-  setCurrentlySelectedListItem: (state: string) => void;
 }
 
 function ListsStackItem(
-  {list, currentlySelectedListItem, setCurrentlySelectedListItem}: ListsStackItemProps
+  {list}: ListsStackItemProps
 ): JSX.Element {
   const dispatch = useAppDispatch();
+
+  const currentlySelectedListId = useAppSelector(getCurrentlySelectedListId);
 
   const [isContentEditable, setContentEditable] = useState(false);
 
@@ -36,7 +37,6 @@ function ListsStackItem(
   }, [titleValue.length]);
 
   const handleListItemButtonClick = (id: string) => {
-    setCurrentlySelectedListItem(id);
     dispatch(setCurrentlySelectedListId(id));
     dispatch(fetchItemsAction({
       listsIds: [id]
@@ -106,7 +106,7 @@ function ListsStackItem(
             : (
               <ListItemButton
                 onClick={() => handleListItemButtonClick(list.id)}
-                selected={list.id === currentlySelectedListItem}
+                selected={list.id === currentlySelectedListId}
               >
                 <ListItemText primary={list.title}/>
               </ListItemButton>

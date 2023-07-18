@@ -1,17 +1,16 @@
 import {Divider, List} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import {getLists} from '../../store/app-data/selectors';
 import {fetchListsAction} from '../../store/api-actions';
 import {nanoid} from 'nanoid';
 import ListsStackItem from '../lists-stack-item/lists-stack-item';
+import AllItemsButton from '../all-items/all-items';
 
 function ListsStack(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const lists = useAppSelector(getLists);
-
-  const [currentlySelectedListItem, setCurrentlySelectedListItem] = useState('');
 
   useEffect(() => {
     dispatch(fetchListsAction());
@@ -19,13 +18,12 @@ function ListsStack(): JSX.Element {
 
   return (
     <List component="nav" aria-label="lists stack">
+      <AllItemsButton />
       {
         lists.map((list) => (
           <ListsStackItem
             key={nanoid()}
             list={list}
-            currentlySelectedListItem={currentlySelectedListItem}
-            setCurrentlySelectedListItem={setCurrentlySelectedListItem}
           />
         ))
       }
