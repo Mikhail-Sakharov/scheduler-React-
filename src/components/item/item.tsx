@@ -34,7 +34,7 @@ function Item({item}: ItemProps): JSX.Element {
 
   const [isContentEditable, setContentEditable] = useState(false);
 
-  const [isDeadlineInputDisabled, setIsDeadlineInputDisabled] = useState(false);
+  const [isDeadlineInputDisabled, setIsDeadlineInputDisabled] = useState(!item.deadline);
 
   const [titleValue, setTitleValue] = useState(item.title);
   const [titleHelperText, setTitleHelperText] = useState('');
@@ -200,8 +200,8 @@ function Item({item}: ItemProps): JSX.Element {
                       disabled={isDeadlineInputDisabled}
                     />
                     <FormControlLabel
-                      control={<Checkbox onChange={handleUndedlinedInputChange}/>}
-                      label="Бессрочно"
+                      control={<Checkbox onChange={handleUndedlinedInputChange} checked={!deadline}/>}
+                      label="нет даты"
                     />
                   </Stack>
                 </>
