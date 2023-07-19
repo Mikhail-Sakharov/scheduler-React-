@@ -47,9 +47,7 @@ function ListsStackItem(
   const onDeleteButtonDispatchData = async () => {
     dispatch(setCurrentlySelectedListId(INBOX_LIST_ID));
     await dispatch(deleteListAction(list.id));
-    dispatch(fetchItemsAction({
-      listsIds: [INBOX_LIST_ID]
-    }));
+    dispatch(fetchItemsAction());
   };
 
   const handleDeleteButtonClick = () => {
