@@ -36,7 +36,7 @@ export const appData = createSlice({
         state.items = action.payload;
       })
       .addCase(postListAction.fulfilled, (state, action) => {
-        state.lists = action.payload;
+        state.currentlySelectedListId = action.payload.id;
       })
       .addCase(fetchListsAction.fulfilled, (state, action) => {
         state.lists = action.payload;

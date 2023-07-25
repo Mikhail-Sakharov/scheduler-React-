@@ -71,14 +71,14 @@ export const deleteItemAction = createAsyncThunk<void, string, {
   },
 );
 
-export const postListAction = createAsyncThunk<ListRdo[], CreateListDto, {
+export const postListAction = createAsyncThunk<ListRdo, CreateListDto, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'lists/post',
   async (createListDto, {dispatch, extra: api}) => {
-    const {data} = await api.post<ListRdo[]>(`${BASE_URL}${ApiRoute.Lists}`, createListDto);
+    const {data} = await api.post<ListRdo>(`${BASE_URL}${ApiRoute.Lists}`, createListDto);
     return data;
   },
 );

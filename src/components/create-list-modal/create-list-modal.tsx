@@ -12,7 +12,7 @@ import {useAppDispatch} from '../../hooks';
 import {
   CREATE_BUTTON_TITLE
 } from '../../ui-const';
-import {postListAction} from '../../store/api-actions';
+import {fetchListsAction, postListAction} from '../../store/api-actions';
 
 function CreateListModal(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -34,13 +34,18 @@ function CreateListModal(): JSX.Element {
     }
   }, [titleValue.length]);
 
+  const onCreateButtonClickDispatch = async () => {
+    await dispatch(postListAction({
+      title: titleValue
+    }));
+    dispatch(fetchListsAction());
+  };
+
   const handleCreateButtonClick = () => {
     if (isFormValid) {
       setTitleValue('');
       setIsModalOpened(false);
-      dispatch(postListAction({
-        title: titleValue
-      }));
+      onCreateButtonClickDispatch();
     }
     if (!titleValue) {
       setTitleHelperText('Введите название');

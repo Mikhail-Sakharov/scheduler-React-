@@ -1,19 +1,27 @@
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {useEffect} from 'react';
 import {fetchItemsAction} from '../../store/api-actions';
-import {getItems} from '../../store/app-data/selectors';
+import {getCurrentlySelectedListId, getItems} from '../../store/app-data/selectors';
 import {Stack} from '@mui/material';
 import {nanoid} from 'nanoid';
 import Item from '../item/item';
+import {INBOX_LIST_ID} from '../../const';
 
 function InboxList(): JSX.Element {
   const dispatch = useAppDispatch();
 
+  const currentlySelectedListId = useAppSelector(getCurrentlySelectedListId);
   const items = useAppSelector(getItems);
 
   useEffect(() => {
-    dispatch(fetchItemsAction());
-  }, [dispatch]);
+    if (currentlySelectedListId === INBOX_LIST_ID) {
+      dispatch(fetchItemsAction());
+    } else {
+      dispatch(fetchItemsAction({
+        listsIds: [currentlySelectedListId]
+      }));
+    }
+  }, [currentlySelectedListId, dispatch]);
 
   return (
     <Stack direction={'column'} spacing={1}>

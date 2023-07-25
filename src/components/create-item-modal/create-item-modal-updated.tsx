@@ -53,7 +53,8 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
     } else {
       setIsFormValid(false);
     }
-  }, [descriptionValue.length, titleValue.length]);
+    setSelectedLists([currentlySelectedListId]);
+  }, [currentlySelectedListId, descriptionValue.length, titleValue.length]);
 
   const refreshSelectedList = () => {
     if (currentlySelectedListId === INBOX_LIST_ID) {
