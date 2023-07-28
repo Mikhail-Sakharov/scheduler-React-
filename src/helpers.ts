@@ -29,7 +29,8 @@ export const getQueryString = (queryArgs?: GetItemsQuery) => {
   if (!queryArgs) {return '';}
 
   const queryParams = [
-    `${queryArgs.listsIds !== undefined ? `listsIds=${queryArgs.listsIds.join(',')}` : ''}`
+    `${queryArgs.listsIds !== undefined ? `listsIds=${queryArgs.listsIds.join(',')}` : ''}`,
+    `${queryArgs.deadline !== undefined ? `deadline=${queryArgs.deadline}` : ''}`
   ];
 
   const isNotEmptyString = queryParams.filter((param) => param !== '').join('') !== '';

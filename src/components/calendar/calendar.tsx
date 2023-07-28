@@ -3,10 +3,16 @@ import {ruRU} from '@mui/x-date-pickers/locales';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/ru';
 import {Dayjs} from 'dayjs';
+import {useAppDispatch} from '../../hooks';
+import {fetchItemsAction} from '../../store/api-actions';
 
 function Calendar(): JSX.Element {
+  const dispatch = useAppDispatch();
+
   const handleDateCalendarChange = (value: Dayjs | null) => {
-    console.log(value?.toISOString());
+    dispatch(fetchItemsAction({
+      deadline: value?.toISOString()
+    }));
   };
 
   return (
