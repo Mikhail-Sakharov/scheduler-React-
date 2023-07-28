@@ -11,7 +11,10 @@ function InboxList(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const currentlySelectedListId = useAppSelector(getCurrentlySelectedListId);
-  const items = useAppSelector(getItems);
+  const itemsFromState = useAppSelector(getItems);
+  const items = currentlySelectedListId === INBOX_LIST_ID
+    ? itemsFromState.filter((item) => item.listsIds.length === 0) // && item.deadline === null
+    : itemsFromState;
 
   useEffect(() => {
     if (currentlySelectedListId === INBOX_LIST_ID) {
