@@ -9,16 +9,19 @@ import {
 } from '../api-actions';
 import {ItemRdo} from '../../types/item.rdo';
 import {ListRdo} from '../../types/list.rdo';
+import {Dayjs} from 'dayjs';
 
 type AppData = {
   items: ItemRdo[];
   lists: ListRdo[];
+  deadline: Dayjs | null;
   currentlySelectedListId: string;
 };
 
 const initialState: AppData = {
   items: [],
   lists: [],
+  deadline: null,
   currentlySelectedListId: INBOX_LIST_ID
 };
 
@@ -28,6 +31,9 @@ export const appData = createSlice({
   reducers: {
     setCurrentlySelectedListId: (state, action) => {
       state.currentlySelectedListId = action.payload as string;
+    },
+    setSelectedDeadline: (state, action) => {
+      state.deadline = action.payload as Dayjs | null;
     }
   },
   extraReducers(builder) {
@@ -51,5 +57,6 @@ export const appData = createSlice({
 });
 
 export const {
-  setCurrentlySelectedListId
+  setCurrentlySelectedListId,
+  setSelectedDeadline
 } = appData.actions;

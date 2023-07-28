@@ -9,8 +9,11 @@ import CreateItemModalUpdated from '../components/create-item-modal/create-item-
 import {AddTask} from '@mui/icons-material';
 import {CREATE_NEW_LIST_ITEM_BUTTON_TITLE} from '../ui-const';
 import {useState} from 'react';
+import {useAppSelector} from '../hooks';
+import {getSelectedDeadline} from '../store/app-data/selectors';
 
 function Main(): JSX.Element {
+  const deadline = useAppSelector(getSelectedDeadline);
 
   const [isModalOpened, setIsModalOpened] = useState(false);
 
@@ -43,7 +46,7 @@ function Main(): JSX.Element {
           </Stack>
         </Stack>
         <Stack direction={'column'} spacing={1}>
-          <Calendar />
+          <Calendar externalValue={deadline}/>
         </Stack>
       </Stack>
     </Stack>

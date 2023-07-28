@@ -4,15 +4,18 @@ import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/ru';
 import {Dayjs} from 'dayjs';
 import {useAppDispatch} from '../../hooks';
-import {fetchItemsAction} from '../../store/api-actions';
+import {setCurrentlySelectedListId, setSelectedDeadline} from '../../store/app-data/app-data';
 
-function Calendar(): JSX.Element {
+interface CalendarProps {
+  externalValue?: Dayjs | null;
+}
+
+function Calendar({externalValue}: CalendarProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const handleDateCalendarChange = (value: Dayjs | null) => {
-    dispatch(fetchItemsAction({
-      deadline: value?.toISOString()
-    }));
+    dispatch(setCurrentlySelectedListId(''));
+    dispatch(setSelectedDeadline(value));
   };
 
   return (
@@ -21,7 +24,7 @@ function Calendar(): JSX.Element {
       localeText={ruRU.components.MuiLocalizationProvider.defaultProps.localeText}
       dateAdapter={AdapterDayjs}
     >
-      <DateCalendar onChange={handleDateCalendarChange}/>
+      <DateCalendar onChange={handleDateCalendarChange} value={externalValue}/>
     </LocalizationProvider>
   );
 }

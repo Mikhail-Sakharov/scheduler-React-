@@ -7,7 +7,7 @@ import {ChangeEvent, useEffect, useState} from 'react';
 import {ListRdo} from '../../types/list.rdo';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {deleteListAction, updateListAction} from '../../store/api-actions';
-import {setCurrentlySelectedListId} from '../../store/app-data/app-data';
+import {setCurrentlySelectedListId, setSelectedDeadline} from '../../store/app-data/app-data';
 import {getCurrentlySelectedListId} from '../../store/app-data/selectors';
 import {INBOX_LIST_ID} from '../../const';
 
@@ -39,6 +39,7 @@ function ListsStackItem(
 
   const handleListItemButtonClick = (id: string) => {
     dispatch(setCurrentlySelectedListId(id));
+    dispatch(setSelectedDeadline(null));
   };
 
   const onDeleteButtonDispatchData = async () => {
