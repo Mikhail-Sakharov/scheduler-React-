@@ -20,8 +20,8 @@ import {ItemType, ItemTypeMap} from '../../types/item-type.enum';
 import DeadlineDatePicker from '../date-picker/date-picker';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import AddToListsModal from '../add-to-lists-modal/add-to-lists-modal';
-import {getCurrentlySelectedListId} from '../../store/app-data/selectors';
-import {INBOX_LIST_ID} from '../../const';
+import {getCurrentlySelectedListId, getSelectedDeadline} from '../../store/app-data/selectors';
+import {Dayjs} from 'dayjs';
 
 export interface CreateItemModalUpdatedProps {
   isModalOpened: boolean;
@@ -32,6 +32,7 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
   const dispatch = useAppDispatch();
 
   const currentlySelectedListId = useAppSelector(getCurrentlySelectedListId);
+  const currentlySelectedDeadline = useAppSelector(getSelectedDeadline);
 
   const [titleValue, setTitleValue] = useState('');
   const [titleHelperText, setTitleHelperText] = useState('');
@@ -43,7 +44,7 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
 
   const [itemType, setItemType] = useState(ItemType.Task);
 
-  const [deadline, setDeadline] = useState<string | undefined>(undefined);
+  const [deadline, setDeadline] = useState<Dayjs | null>(null);
 
   const [isFormValid, setIsFormValid] = useState(false);
 
@@ -53,16 +54,36 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
     } else {
       setIsFormValid(false);
     }
-    setSelectedLists([currentlySelectedListId]);
-  }, [currentlySelectedListId, descriptionValue.length, titleValue.length]);
+  }, [descriptionValue.length, titleValue.length]);
+
+  // устанавливает начальные значения списков и дедлайна
+  // если новый элемент создаётся, когда выбраны
+  // конкретный список или дата в календаре, соответственно
+  useEffect(() => {
+    if (currentlySelectedListId) {
+      setSelectedLists([currentlySelectedListId]);
+    }
+    if (currentlySelectedDeadline) {
+      setDeadline(currentlySelectedDeadline);
+    }
+  }, [currentlySelectedListId, currentlySelectedDeadline]);
 
   const refreshSelectedList = () => {
-    if (currentlySelectedListId === INBOX_LIST_ID) {
-      dispatch(fetchItemsAction());
-    } else {
-      dispatch(fetchItemsAction({
-        listsIds: [currentlySelectedListId]
-      }));
+    switch(currentlySelectedListId) {
+      case null:
+        if (currentlySelectedDeadline) {
+          dispatch(fetchItemsAction({
+            deadline: currentlySelectedDeadline.toISOString()
+          }));
+        } else {
+          dispatch(fetchItemsAction());
+        }
+        break;
+      default:
+        dispatch(fetchItemsAction({
+          listsIds: [currentlySelectedListId]
+        }));
+        break;
     }
   };
 
@@ -71,7 +92,7 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
       title: titleValue,
       listsIds: selectedLists,
       description: descriptionValue,
-      deadline,
+      deadline: deadline?.toISOString(),
       type: itemType
     }));
     refreshSelectedList();
@@ -81,7 +102,7 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
     if (isFormValid) {
       setTitleValue('');
       setDescriptionValue('');
-      setDeadline(undefined);
+      setDeadline(null);
       setIsModalOpened(false);
       onCreateButtonClickDispatchData();
     }
@@ -154,7 +175,10 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
           label="Название"
           variant="outlined"
         />
-        <AddToListsModal setExtSelectedLists={setSelectedLists} listsIds={[currentlySelectedListId]}/>
+        <AddToListsModal
+          setExtSelectedLists={setSelectedLists}
+          listsIds={currentlySelectedListId ? [currentlySelectedListId] : []}
+        />
         <TextField
           error={descriptionHelperText !== ''}
           helperText={descriptionHelperText}
@@ -185,7 +209,7 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
               }
             </Select>
           </FormControl>
-          <DeadlineDatePicker setDeadline={setDeadline}/>
+          <DeadlineDatePicker setDeadline={setDeadline} value={deadline}/>
         </Stack>
         <Stack direction="row" spacing={2} justifyContent={'center'}>
           <Button

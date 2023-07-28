@@ -16,8 +16,8 @@ import DeadlineDatePicker from '../date-picker/date-picker';
 import {Cancel} from '@mui/icons-material';
 import {EXPIRED_ITEM_DEADLINE_COLOR, UNEXPIRED_ITEM_DEADLINE_COLOR} from '../../ui-const';
 import AddToListsModal from '../add-to-lists-modal/add-to-lists-modal';
-import {getCurrentlySelectedListId} from '../../store/app-data/selectors';
-import {INBOX_LIST_ID} from '../../const';
+import {getCurrentlySelectedListId, getSelectedDeadline} from '../../store/app-data/selectors';
+import dayjs, {Dayjs} from 'dayjs';
 
 type ItemProps = {
   item: ItemRdo;
@@ -27,6 +27,7 @@ function Item({item}: ItemProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const currentlySelectedListId = useAppSelector(getCurrentlySelectedListId);
+  const currentlySelectedDeadline = useAppSelector(getSelectedDeadline);
 
   const itemDeadlineColor = item.deadline && new Date(item.deadline) < new Date()
     ? EXPIRED_ITEM_DEADLINE_COLOR
@@ -44,7 +45,7 @@ function Item({item}: ItemProps): JSX.Element {
   const [descriptionValue, setDescriptionValue] = useState(item.description);
   const [descriptionHelperText, setDescriptionHelperText] = useState('');
 
-  const [deadline, setDeadline] = useState<string | undefined>(item.deadline ?? undefined);
+  const [deadline, setDeadline] = useState<Dayjs | null>(dayjs(item.deadline) ?? null);
 
   const [isFormValid, setIsFormValid] = useState(false);
 
@@ -57,12 +58,21 @@ function Item({item}: ItemProps): JSX.Element {
   }, [descriptionValue.length, titleValue.length]);
 
   const refreshSelectedList = () => {
-    if (currentlySelectedListId === INBOX_LIST_ID) {
-      dispatch(fetchItemsAction());
-    } else {
-      dispatch(fetchItemsAction({
-        listsIds: [currentlySelectedListId]
-      }));
+    switch(currentlySelectedListId) {
+      case null:
+        if (currentlySelectedDeadline) {
+          dispatch(fetchItemsAction({
+            deadline: currentlySelectedDeadline.toISOString()
+          }));
+        } else {
+          dispatch(fetchItemsAction());
+        }
+        break;
+      default:
+        dispatch(fetchItemsAction({
+          listsIds: [currentlySelectedListId]
+        }));
+        break;
     }
   };
 
@@ -82,7 +92,7 @@ function Item({item}: ItemProps): JSX.Element {
         title: titleValue,
         listsIds: selectedLists,
         description: descriptionValue,
-        deadline: deadline ?? null
+        deadline: deadline ? deadline.toISOString() : null
       }
     }));
     refreshSelectedList();
@@ -136,7 +146,7 @@ function Item({item}: ItemProps): JSX.Element {
   const handleUndedlinedInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const checked = evt.currentTarget.checked;
     if (checked) {
-      setDeadline(undefined);
+      setDeadline(null);
       setIsDeadlineInputDisabled(true);
     } else {
       setIsDeadlineInputDisabled(false);
@@ -196,7 +206,7 @@ function Item({item}: ItemProps): JSX.Element {
                   <Stack direction={'row'} spacing={2}>
                     <DeadlineDatePicker
                       setDeadline={setDeadline}
-                      value={item.deadline ?? undefined}
+                      value={dayjs(item.deadline) ?? null}
                       disabled={isDeadlineInputDisabled}
                     />
                     <FormControlLabel

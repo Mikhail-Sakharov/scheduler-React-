@@ -1,16 +1,16 @@
 import {Divider, ListItemButton, ListItemText, Stack} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {setCurrentlySelectedListId, setSelectedDeadline} from '../../store/app-data/app-data';
-import {getCurrentlySelectedListId} from '../../store/app-data/selectors';
-import {INBOX_LIST_ID} from '../../const';
+import {getCurrentlySelectedListId, getSelectedDeadline} from '../../store/app-data/selectors';
 
 function AllItemsButton(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const currentlySelectedListId = useAppSelector(getCurrentlySelectedListId);
+  const selectedDeadline = useAppSelector(getSelectedDeadline);
 
   const handleListItemButtonClick = () => {
-    dispatch(setCurrentlySelectedListId(INBOX_LIST_ID));
+    dispatch(setCurrentlySelectedListId(null));
     dispatch(setSelectedDeadline(null));
   };
 
@@ -19,7 +19,7 @@ function AllItemsButton(): JSX.Element {
       <Divider />
       <ListItemButton
         onClick={handleListItemButtonClick}
-        selected={currentlySelectedListId === INBOX_LIST_ID}
+        selected={!currentlySelectedListId && !selectedDeadline}
       >
         <ListItemText primary='Входящие'/>
       </ListItemButton>

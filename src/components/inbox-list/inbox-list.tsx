@@ -5,28 +5,31 @@ import {getCurrentlySelectedListId, getItems, getSelectedDeadline} from '../../s
 import {Stack} from '@mui/material';
 import {nanoid} from 'nanoid';
 import Item from '../item/item';
-import {INBOX_LIST_ID} from '../../const';
 
 function InboxList(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const currentlySelectedListId = useAppSelector(getCurrentlySelectedListId);
-  const selectedDeadline = useAppSelector(getSelectedDeadline);
+  const currentlySelectedDeadline = useAppSelector(getSelectedDeadline);
   const itemsFromState = useAppSelector(getItems);
-  const items = currentlySelectedListId === INBOX_LIST_ID
-    ? itemsFromState.filter((item) => item.listsIds.length === 0) // && item.deadline === null
+
+  // TODO: после добавления индикации наличия задач в календаре
+  // добавить фильтрацию во входящие:
+  // ----- && item.deadline === null
+  const items = currentlySelectedListId === null
+    ? itemsFromState.filter((item) => item.listsIds.length === 0)
     : itemsFromState;
 
   useEffect(() => {
     switch(currentlySelectedListId) {
-      case INBOX_LIST_ID:
-        dispatch(fetchItemsAction());
-        break;
-      case '':
-        selectedDeadline &&
+      case null:
+        if (currentlySelectedDeadline) {
           dispatch(fetchItemsAction({
-            deadline: selectedDeadline.toISOString()
+            deadline: currentlySelectedDeadline.toISOString()
           }));
+        } else {
+          dispatch(fetchItemsAction());
+        }
         break;
       default:
         dispatch(fetchItemsAction({
@@ -34,7 +37,7 @@ function InboxList(): JSX.Element {
         }));
         break;
     }
-  }, [currentlySelectedListId, selectedDeadline, dispatch]);
+  }, [currentlySelectedListId, currentlySelectedDeadline, dispatch]);
 
   return (
     <Stack

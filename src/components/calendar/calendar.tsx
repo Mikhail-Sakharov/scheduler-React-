@@ -14,7 +14,7 @@ function Calendar({externalValue}: CalendarProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const handleDateCalendarChange = (value: Dayjs | null) => {
-    dispatch(setCurrentlySelectedListId(''));
+    dispatch(setCurrentlySelectedListId(null));
     dispatch(setSelectedDeadline(value));
   };
 

@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {INBOX_LIST_ID, ReducerNameSpace} from '../../const';
+import {ReducerNameSpace} from '../../const';
 import {
   deleteListAction,
   fetchItemsAction,
@@ -15,14 +15,14 @@ type AppData = {
   items: ItemRdo[];
   lists: ListRdo[];
   deadline: Dayjs | null;
-  currentlySelectedListId: string;
+  currentlySelectedListId: string | null;
 };
 
 const initialState: AppData = {
   items: [],
   lists: [],
   deadline: null,
-  currentlySelectedListId: INBOX_LIST_ID
+  currentlySelectedListId: null
 };
 
 export const appData = createSlice({
@@ -30,7 +30,7 @@ export const appData = createSlice({
   initialState,
   reducers: {
     setCurrentlySelectedListId: (state, action) => {
-      state.currentlySelectedListId = action.payload as string;
+      state.currentlySelectedListId = action.payload as string | null;
     },
     setSelectedDeadline: (state, action) => {
       state.deadline = action.payload as Dayjs | null;

@@ -14,5 +14,3 @@ export enum AppRoute {
 export enum ReducerNameSpace {
   AppData = 'APP_DATA'
 }
-
-export const INBOX_LIST_ID = 'INBOX_LIST_ID';

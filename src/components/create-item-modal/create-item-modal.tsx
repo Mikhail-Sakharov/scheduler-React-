@@ -23,6 +23,7 @@ import {
   CREATE_NEW_LIST_ITEM_BUTTON_TITLE,
   CREATE_NEW_LIST_ITEM_MODAL_TITLE
 } from '../../ui-const';
+import {Dayjs} from 'dayjs';
 
 function CreateItemModal(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -39,7 +40,7 @@ function CreateItemModal(): JSX.Element {
 
   const [itemType, setItemType] = useState(ItemType.Task);
 
-  const [deadline, setDeadline] = useState<string | undefined>(undefined);
+  const [deadline, setDeadline] = useState<Dayjs | null>(null);
 
   const [isFormValid, setIsFormValid] = useState(false);
 
@@ -55,12 +56,12 @@ function CreateItemModal(): JSX.Element {
     if (isFormValid) {
       setTitleValue('');
       setDescriptionValue('');
-      setDeadline(undefined);
+      setDeadline(null);
       setIsModalOpened(false);
       dispatch(postItemAction({
         title: titleValue,
         description: descriptionValue,
-        deadline,
+        deadline: deadline?.toISOString(),
         type: itemType
       }));
     }
