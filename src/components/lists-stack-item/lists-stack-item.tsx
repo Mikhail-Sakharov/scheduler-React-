@@ -6,7 +6,7 @@ import {Cancel} from '@mui/icons-material';
 import {ChangeEvent, useEffect, useState} from 'react';
 import {ListRdo} from '../../types/list.rdo';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {deleteListAction, fetchItemsAction, updateListAction} from '../../store/api-actions';
+import {deleteListAction, updateListAction} from '../../store/api-actions';
 import {setCurrentlySelectedListId} from '../../store/app-data/app-data';
 import {getCurrentlySelectedListId} from '../../store/app-data/selectors';
 import {INBOX_LIST_ID} from '../../const';
@@ -39,18 +39,14 @@ function ListsStackItem(
 
   const handleListItemButtonClick = (id: string) => {
     dispatch(setCurrentlySelectedListId(id));
-    dispatch(fetchItemsAction({
-      listsIds: [id]
-    }));
   };
 
   const onDeleteButtonDispatchData = async () => {
-    dispatch(setCurrentlySelectedListId(INBOX_LIST_ID));
     await dispatch(deleteListAction(list.id));
-    dispatch(fetchItemsAction());
+    dispatch(setCurrentlySelectedListId(INBOX_LIST_ID));
   };
 
-  const handleDeleteButtonClick = () => {
+  const handleDeleteListButtonClick = () => {
     onDeleteButtonDispatchData();
   };
 
@@ -124,7 +120,7 @@ function ListsStackItem(
             isContentEditable
               ? (
                 <>
-                  <IconButton onClick={handleDeleteButtonClick}>
+                  <IconButton onClick={handleDeleteListButtonClick}>
                     <DeleteIcon color='error'/>
                   </IconButton>
                   <IconButton onClick={handleSaveButtonClick}>
