@@ -45,7 +45,7 @@ function Item({item}: ItemProps): JSX.Element {
   const [descriptionValue, setDescriptionValue] = useState(item.description);
   const [descriptionHelperText, setDescriptionHelperText] = useState('');
 
-  const [deadline, setDeadline] = useState<Dayjs | null>(dayjs(item.deadline) ?? null);
+  const [deadline, setDeadline] = useState<Dayjs | null>(item.deadline ? dayjs(item.deadline) : null);
 
   const [isFormValid, setIsFormValid] = useState(false);
 

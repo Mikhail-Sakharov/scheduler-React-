@@ -18,9 +18,10 @@ const MonthNamesMap = {
 export const getDeadlineDate = (date: string) => {
   const day = `${date[8]}${date[9]}`;
   const month = MonthNamesMap[`${date[5]}${date[6]}` as keyof typeof MonthNamesMap];
+  const year = `${date[0]}${date[1]}${date[2]}${date[3]}`;
   const time = date.match(/(?<=T)\d{2}:\d{2}/);
 
-  const deadlineDate = `${day} ${month}, ${time ? time[0] : ''}`;
+  const deadlineDate = `${day} ${month} ${year}, ${time ? time[0] : ''}`;
 
   return deadlineDate;
 };

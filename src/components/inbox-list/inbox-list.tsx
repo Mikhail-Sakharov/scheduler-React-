@@ -16,7 +16,7 @@ function InboxList(): JSX.Element {
   // TODO: после добавления индикации наличия задач в календаре
   // добавить фильтрацию во входящие:
   // ----- && item.deadline === null
-  const items = currentlySelectedListId === null
+  const items = !currentlySelectedListId && !currentlySelectedDeadline
     ? itemsFromState.filter((item) => item.listsIds.length === 0)
     : itemsFromState;
 

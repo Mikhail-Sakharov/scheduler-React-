@@ -30,7 +30,7 @@ function Main(): JSX.Element {
             <CreateListModal/>
             <ListsStack />
           </Stack>
-          <Stack direction={'column'} width={800} spacing={1}>
+          <Stack direction={'column'} width={860} spacing={1}>
             <Button
               onClick={handleCreateNewItemButtonClick}
               variant="contained"
