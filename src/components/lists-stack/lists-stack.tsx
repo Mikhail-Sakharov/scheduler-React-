@@ -17,7 +17,14 @@ function ListsStack(): JSX.Element {
   }, [dispatch]);
 
   return (
-    <List component="nav" aria-label="lists stack">
+    <List
+      sx={{
+        height: '80dvh',
+        overflowY: 'scroll'
+      }}
+      component="nav"
+      aria-label="lists stack"
+    >
       <AllItemsButton />
       {
         lists.map((list) => (

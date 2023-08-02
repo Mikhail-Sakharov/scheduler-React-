@@ -63,9 +63,7 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
     if (currentlySelectedListId) {
       setSelectedLists([currentlySelectedListId]);
     }
-    if (currentlySelectedDeadline) {
-      setDeadline(currentlySelectedDeadline);
-    }
+    setDeadline(currentlySelectedDeadline);
   }, [currentlySelectedListId, currentlySelectedDeadline]);
 
   const refreshSelectedList = () => {
@@ -102,7 +100,9 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
     if (isFormValid) {
       setTitleValue('');
       setDescriptionValue('');
-      setDeadline(null);
+      if (!currentlySelectedDeadline) {
+        setDeadline(null);
+      }
       setIsModalOpened(false);
       onCreateButtonClickDispatchData();
     }
@@ -209,7 +209,10 @@ function CreateItemModalUpdated({isModalOpened, setIsModalOpened}: CreateItemMod
               }
             </Select>
           </FormControl>
-          <DeadlineDatePicker setDeadline={setDeadline} value={deadline}/>
+          <DeadlineDatePicker
+            setDeadline={setDeadline}
+            value={deadline ?? null}
+          />
         </Stack>
         <Stack direction="row" spacing={2} justifyContent={'center'}>
           <Button

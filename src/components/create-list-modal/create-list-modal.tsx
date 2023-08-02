@@ -13,6 +13,7 @@ import {
   CREATE_BUTTON_TITLE
 } from '../../ui-const';
 import {fetchListsAction, postListAction} from '../../store/api-actions';
+import {setSelectedDeadline} from '../../store/app-data/app-data';
 
 function CreateListModal(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -39,6 +40,7 @@ function CreateListModal(): JSX.Element {
       title: titleValue
     }));
     dispatch(fetchListsAction());
+    dispatch(setSelectedDeadline(null));
   };
 
   const handleCreateButtonClick = () => {
