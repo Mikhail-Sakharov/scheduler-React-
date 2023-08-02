@@ -1,6 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {rootReducer} from './root-reducer';
 import {createAPI} from '../services/api';
+import {calendarApi} from '../services/calendar-api.service';
 
 const api = createAPI();
 
@@ -11,5 +12,5 @@ export const store = configureStore({
       thunk: {
         extraArgument: api
       }
-    })
+    }).concat(calendarApi.middleware)
 });

@@ -12,5 +12,6 @@ export enum AppRoute {
 }
 
 export enum ReducerNameSpace {
-  AppData = 'APP_DATA'
+  AppData = 'APP_DATA',
+  CalendarData = 'CALENDAR_DATA'
 }
