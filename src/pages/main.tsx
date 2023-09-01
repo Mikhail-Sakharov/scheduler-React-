@@ -24,26 +24,24 @@ function Main(): JSX.Element {
   return (
     <Stack direction={'column'} spacing={1}>
       <Header />
-      <Stack direction={'row'} spacing={1} justifyContent={'space-between'}>
-        <Stack direction={'row'} spacing={1} justifyContent={'flex-start'}>
-          <Stack direction={'column'} width={400} spacing={1}>
-            <CreateListModal/>
-            <ListsStack />
-          </Stack>
-          <Stack direction={'column'} width={860} spacing={1}>
-            <Button
-              onClick={handleCreateNewItemButtonClick}
-              variant="contained"
-              endIcon={<AddTask />}
-            >
-              {CREATE_NEW_LIST_ITEM_BUTTON_TITLE}
-            </Button>
-            <CreateItemModalUpdated
-              isModalOpened={isModalOpened}
-              setIsModalOpened={setIsModalOpened}
-            />
-            <InboxList />
-          </Stack>
+      <Stack direction={'row'} spacing={1}>
+        <Stack direction={'column'} width={400} spacing={1}>
+          <CreateListModal/>
+          <ListsStack />
+        </Stack>
+        <Stack direction={'column'} spacing={1} flex={'auto'}>
+          <Button
+            onClick={handleCreateNewItemButtonClick}
+            variant="contained"
+            endIcon={<AddTask />}
+          >
+            {CREATE_NEW_LIST_ITEM_BUTTON_TITLE}
+          </Button>
+          <CreateItemModalUpdated
+            isModalOpened={isModalOpened}
+            setIsModalOpened={setIsModalOpened}
+          />
+          <InboxList />
         </Stack>
         <Stack direction={'column'} spacing={1}>
           <Calendar externalValue={deadline}/>
